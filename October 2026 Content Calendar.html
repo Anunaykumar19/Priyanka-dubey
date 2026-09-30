@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>October 2026 Content Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #F3F3F0;
+  --surface: #FFFFFF;
+  --ink: #1D1B38;
+  --muted: #5E5C74;
+  --line: #DCDAE4;
+  --accent: #D9730D;
+  --accent-soft: #FBE9D6;
+  --fest: #2F7D55;
+  --jay: #8C2331;
+  --hist: #2F5673;
+  --world: #6B4FA0;
+  --empty: #ECEBE7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14132A;
+    --surface: #1D1C36;
+    --ink: #EDEBF7;
+    --muted: #A9A6C2;
+    --line: #34325A;
+    --accent: #F0943A;
+    --accent-soft: #3A2A1E;
+    --fest: #62C08F;
+    --jay: #E27A87;
+    --hist: #83AACB;
+    --world: #B59DE8;
+    --empty: #191830;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14132A;
+  --surface: #1D1C36;
+  --ink: #EDEBF7;
+  --muted: #A9A6C2;
+  --line: #34325A;
+  --accent: #F0943A;
+  --accent-soft: #3A2A1E;
+  --fest: #62C08F;
+  --jay: #E27A87;
+  --hist: #83AACB;
+  --world: #B59DE8;
+  --empty: #191830;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Mukta", "Noto Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 1320px; margin: 0 auto; padding: 28px 20px 40px; }
+
+.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px 28px; margin-bottom: 22px; }
+.title h1 {
+  font-family: "Yatra One", "Mukta", serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  line-height: 1;
+  margin: 0;
+  color: var(--accent);
+}
+.title p { margin: 8px 0 0; color: var(--muted); max-width: 60ch; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; padding: 0; list-style: none; font-size: 0.9rem; color: var(--muted); }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.t-fest { --c: var(--fest); } .t-jay { --c: var(--jay); } .t-hist { --c: var(--hist); } .t-world { --c: var(--world); }
+.dot { background: var(--c); }
+
+.toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); }
+.toggle button { border: 0; background: transparent; padding: 6px 16px; cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 22px; align-items: start; }
+
+/* Month grid */
+.weekdays, .grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.weekdays { margin-bottom: 6px; font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.weekdays span { padding-left: 8px; }
+.cell {
+  position: relative;
+  min-height: 132px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px 8px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+}
+.cell.blank { background: var(--empty); border-color: transparent; cursor: default; }
+.cell:hover:not(.blank) { border-color: var(--muted); }
+.cell[aria-current="true"] { border: 2px solid var(--accent); padding: 5px 7px 7px; background: var(--accent-soft); }
+.cell .num { font-family: "Yatra One", "Mukta", serif; font-size: 1.7rem; line-height: 1; }
+.cell .occ { font-size: 0.78rem; line-height: 1.25; font-weight: 600; color: var(--c, var(--muted)); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cell .topic { font-size: 0.82rem; line-height: 1.3; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.cell .dots { display: flex; gap: 3px; position: absolute; top: 10px; right: 8px; }
+.cell .done { position: absolute; bottom: 6px; right: 8px; font-size: 0.75rem; color: var(--fest); font-weight: 700; }
+.cell.has-occ { box-shadow: inset 4px 0 0 var(--c); }
+
+/* List view */
+.list { display: flex; flex-direction: column; gap: 8px; }
+.row {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 14px;
+  text-align: left;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+.row[aria-current="true"] { border: 2px solid var(--accent); padding: 11px 13px; background: var(--accent-soft); }
+.row .when { display: flex; flex-direction: column; }
+.row .when b { font-family: "Yatra One", "Mukta", serif; font-weight: 400; font-size: 1.9rem; line-height: 1; }
+.row .when span { color: var(--muted); font-size: 0.85rem; }
+.row .tags { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 2px; }
+.row .tag { font-size: 0.85rem; font-weight: 600; color: var(--c); display: inline-flex; align-items: center; gap: 5px; }
+.row .rtopic { font-weight: 600; }
+.row .ralt, .row .rtrend { font-size: 0.9rem; color: var(--muted); }
+
+/* Detail panel */
+.detail {
+  position: sticky;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+}
+.detail h2 { font-family: "Yatra One", "Mukta", serif; font-weight: 400; font-size: 1.9rem; line-height: 1.1; margin: 0 0 12px; }
+.occ-list { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.occ-list li { display: flex; gap: 8px; align-items: baseline; font-weight: 600; color: var(--c); }
+.occ-list li .dot { transform: translateY(1px); }
+.occ-list li.none { color: var(--muted); font-weight: 400; }
+.field { margin-bottom: 14px; }
+.field label, .field .lbl { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.field .hint { font-size: 0.82rem; color: var(--muted); margin: 0 0 6px; }
+.field textarea, .field input[type="text"] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  padding: 8px 10px;
+  resize: vertical;
+}
+.alt { font-size: 0.92rem; color: var(--muted); margin: 0; }
+.check { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 0.9rem; color: var(--muted); }
+.check input { width: 18px; height: 18px; accent-color: var(--fest); }
+.reset { border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 0.88rem; color: var(--muted); }
+.reset:hover { color: var(--ink); border-color: var(--muted); }
+
+.foot { margin-top: 28px; color: var(--muted); font-size: 0.9rem; max-width: 80ch; }
+.foot strong { color: var(--ink); }
+
+[hidden] { display: none !important; }
+
+@media (max-width: 1040px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .detail { position: static; }
+}
+@media (max-width: 700px) {
+  .wrap { padding: 18px 12px 32px; }
+  .cell { min-height: 62px; padding: 4px 5px; }
+  .cell[aria-current="true"] { padding: 3px 4px; }
+  .cell .num { font-size: 1.25rem; }
+  .cell .occ, .cell .topic { display: none; }
+  .cell .dots { position: static; }
+  .cell .done { bottom: 3px; right: 5px; }
+  .weekdays span { padding-left: 4px; font-size: 0.75rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .detail { transition: border-color .2s; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="title">
+      <h1>अक्टूबर 2026</h1>
+      <p>Instagram plan for Priyanka Dubey. Two reels a day: one on that day's news, one on the topic planned below. Tap any date to edit its topic, add the trending reel, and mark what's posted.</p>
+    </div>
+    <div class="controls">
+      <ul class="legend">
+        <li class="t-fest"><span class="dot"></span>Festival</li>
+        <li class="t-jay"><span class="dot"></span>Jayanti / Punyatithi</li>
+        <li class="t-hist"><span class="dot"></span>History / defence date</li>
+        <li class="t-world"><span class="dot"></span>World / geopolitics</li>
+      </ul>
+      <div class="toggle" role="group" aria-label="View">
+        <button type="button" id="vMonth" aria-pressed="true">Month</button>
+        <button type="button" id="vList" aria-pressed="false">List</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div>
+      <section id="monthView" aria-label="Month view">
+        <div class="weekdays" aria-hidden="true">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <div class="grid" id="grid"></div>
+      </section>
+      <section id="listView" class="list" aria-label="List view" hidden></section>
+    </div>
+    <aside class="detail" id="detail" aria-live="polite"></aside>
+  </main>
+
+  <p class="foot"><strong>Coming up in November:</strong> 1 Nov, anniversary of the 1984 anti-Sikh riots. 8 Nov, Diwali. 15 Nov, anniversary of Godse's execution. Festival dates follow Drik Panchang; confirm tithis for your region. The Nobel Peace Prize date is expected, not confirmed.</p>
+</div>
+
+<script>
+const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+const DAYS = [
+  { d:1,  occ:[], topic:"Savarkar and Kala Pani: what he went through in the Andamans", alt:"Savarkar vs Congress leaders: who really paid for freedom" },
+  { d:2,  occ:[["Gandhi Jayanti","jay"],["Lal Bahadur Shastri Jayanti","jay"]], topic:"Why Godse killed Gandhi", alt:"Shastri: Jai Jawan Jai Kisan and the 1965 war" },
+  { d:3,  occ:[], topic:"Shastri's death in Tashkent: the unanswered questions", alt:"" },
+  { d:4,  occ:[], topic:"Could Gandhi have saved Bhagat Singh? The Gandhi–Irwin Pact", alt:"" },
+  { d:5,  occ:[["Rani Durgavati Jayanti","jay"]], topic:"Rani Durgavati vs Akbar, and the 'Akbar the Great' myth", alt:"" },
+  { d:6,  occ:[], topic:"Aksai Chin: how India lost it to China", alt:"" },
+  { d:7,  occ:[["Guru Gobind Singh Punyatithi","jay"],["Anniversary of the 7 Oct 2023 Hamas attack","world"]], topic:"Guru Gobind Singh and the sacrifice of the Sahibzade", alt:"Gandhi's 1938 view on Jews and Palestine vs India's Israel policy today" },
+  { d:8,  occ:[["Indian Air Force Day","hist"]], topic:"1962: why the Air Force was kept out of the war", alt:"Operation Sindoor: what the IAF struck" },
+  { d:9,  occ:[["Nobel Peace Prize announcement (expected)","world"]], topic:"Banda Singh Bahadur: the man who broke Mughal Sirhind", alt:"" },
+  { d:10, occ:[], topic:"How the Marathas broke the Mughal empire", alt:"" },
+  { d:11, occ:[["Sharad Navratri begins","fest"],["Jayaprakash Narayan & Nanaji Deshmukh Jayanti","jay"]], topic:"Warrior Queens #1: Naiki Devi, who defeated Muhammad Ghori", alt:"JP vs Indira: the road to the Emergency" },
+  { d:12, occ:[["Navratri Day 2","fest"],["Ram Manohar Lohia Punyatithi","jay"]], topic:"Warrior Queens #2: Rani Abbakka vs the Portuguese", alt:"" },
+  { d:13, occ:[["Navratri Day 3","fest"],["Sister Nivedita Punyatithi","jay"]], topic:"Warrior Queens #3: Velu Nachiyar, who beat the British before 1857", alt:"" },
+  { d:14, occ:[["Navratri Day 4","fest"],["Dhammachakra Pravartan Din (Ambedkar, 1956)","hist"]], topic:"Warrior Queens #4: Rudrama Devi of the Kakatiyas", alt:"Ambedkar vs Gandhi: the Poona Pact" },
+  { d:15, occ:[["Navratri Day 5","fest"],["APJ Abdul Kalam Jayanti","jay"]], topic:"Warrior Queens #5: Tarabai, the widow who held off Aurangzeb", alt:"" },
+  { d:16, occ:[["Navratri Day 6","fest"],["Partition of Bengal, 1905","hist"]], topic:"Warrior Queens #6: Ahilyabai Holkar and the temples she rebuilt", alt:"1905 Bengal Partition: the British divide-and-rule playbook" },
+  { d:17, occ:[["Navratri Day 7","fest"],["Tula Sankranti","fest"]], topic:"Warrior Queens #7: Rani Padmini and the Jauhar of Chittor", alt:"" },
+  { d:18, occ:[["Navratri Day 8","fest"]], topic:"Warrior Queens #8: Rani Lakshmibai, the real story of Jhansi", alt:"" },
+  { d:19, occ:[["Durga Ashtami & Maha Navami","fest"]], topic:"Warrior Queens #9: Rani Gaidinliu, the Naga queen jailed at 16", alt:"" },
+  { d:20, occ:[["Dussehra / Vijayadashami","fest"],["China attacks India, 1962","hist"],["RSS foundation day (1925)","hist"]], topic:"1962 war: Nehru's biggest failure", alt:"RSS at 101: why it was founded on Vijayadashami" },
+  { d:21, occ:[["Azad Hind Government formed, 1943","hist"],["Police Commemoration Day","hist"]], topic:"Netaji vs Gandhi: why Bose was pushed out of Congress", alt:"" },
+  { d:22, occ:[["Pakistan's tribal invasion of Kashmir, 1947","hist"],["Ashfaqulla Khan Jayanti","jay"]], topic:"22 October 1947: how Pakistan invaded Kashmir", alt:"" },
+  { d:23, occ:[["Kittur Chennamma's revolt, 1824","hist"]], topic:"Kittur Chennamma: the revolt 33 years before 1857", alt:"" },
+  { d:24, occ:[["UN Day","world"]], topic:"Did Nehru give away India's UNSC seat?", alt:"" },
+  { d:25, occ:[["Sharad Purnima","fest"],["First general election began, 1951","hist"]], topic:"Ambedkar vs Congress: why Congress defeated him in 1952", alt:"Sharad Purnima: the story behind the moonlit kheer" },
+  { d:26, occ:[["J&K Accession Day, 1947","hist"],["Valmiki Jayanti (confirm 25/26)","fest"]], topic:"Kashmir: Nehru, the UN and Article 370", alt:"" },
+  { d:27, occ:[["Infantry Day","hist"]], topic:"How the Indian Army saved Srinagar in 1947", alt:"" },
+  { d:28, occ:[["Sister Nivedita Jayanti","jay"]], topic:"Vande Mataram: why Congress cut it in 1937", alt:"Sister Nivedita: Vivekananda's Irish disciple" },
+  { d:29, occ:[["Karwa Chauth","fest"]], topic:"Karwa Chauth: the story and history behind the fast", alt:"" },
+  { d:30, occ:[["Ayodhya kar sevak firing, 1990","hist"],["Homi Bhabha Jayanti","jay"]], topic:"30 October 1990: the firing on kar sevaks in Ayodhya", alt:"Homi Bhabha's death: accident or conspiracy?" },
+  { d:31, occ:[["Sardar Patel Jayanti / Rashtriya Ekta Diwas","jay"],["Indira Gandhi Punyatithi","jay"]], topic:"Why Patel never became Prime Minister", alt:"1984 anti-Sikh riots (leads into 1 Nov)" }
+];
+
+const KEY = "oct2026-content-plan";
+let store = {};
+try { store = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { store = {}; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+function saved(d) { return store[d] || (store[d] = {}); }
+function topicOf(day) { const s = store[day.d]; return (s && typeof s.topic === "string") ? s.topic : day.topic; }
+
+function weekday(d) { return WEEKDAYS[new Date(2026, 9, d).getDay()]; }
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c])); }
+function postedCount(d) { const s = store[d] || {}; return (s.ev ? 1 : 0) + (s.tr ? 1 : 0); }
+
+let selected = 1;
+const today = new Date();
+if (today.getFullYear() === 2026 && today.getMonth() === 9) selected = today.getDate();
+
+const grid = document.getElementById("grid");
+const listView = document.getElementById("listView");
+const monthView = document.getElementById("monthView");
+const detail = document.getElementById("detail");
+
+function renderGrid() {
+  const first = new Date(2026, 9, 1).getDay(); // 0 = Sun
+  const lead = (first + 6) % 7; // Monday-first
+  let html = "";
+  for (let i = 0; i < lead; i++) html += '<div class="cell blank" aria-hidden="true"></div>';
+  DAYS.forEach(day => {
+    const main = day.occ[0];
+    const cls = main ? ` has-occ t-${main[1]}` : "";
+    const dots = day.occ.map(o => `<span class="dot t-${o[1]}"></span>`).join("");
+    const pc = postedCount(day.d);
+    html += `<button type="button" class="cell${cls}" data-d="${day.d}" aria-current="${day.d === selected}" aria-label="${day.d} October, ${weekday(day.d)}${main ? ", " + esc(main[0]) : ""}">
+      <span class="num">${day.d}</span>
+      <span class="dots">${dots}</span>
+      ${main ? `<span class="occ t-${main[1]}">${esc(main[0])}</span>` : ""}
+      <span class="topic">${esc(topicOf(day))}</span>
+      ${pc ? `<span class="done">${pc}/2 ✓</span>` : ""}
+    </button>`;
+  });
+  grid.innerHTML = html;
+}
+
+function renderList() {
+  listView.innerHTML = DAYS.map(day => {
+    const s = store[day.d] || {};
+    const tags = day.occ.length
+      ? day.occ.map(o => `<span class="tag t-${o[1]}"><span class="dot"></span>${esc(o[0])}</span>`).join("")
+      : `<span class="tag" style="--c:var(--muted)">No major date</span>`;
+    const pc = postedCount(day.d);
+    return `<button type="button" class="row" data-d="${day.d}" aria-current="${day.d === selected}">
+      <span class="when"><b>${day.d}</b><span>${weekday(day.d).slice(0,3)}${pc ? ", " + pc + "/2 ✓" : ""}</span></span>
+      <span>
+        <span class="tags">${tags}</span>
+        <span class="rtopic">${esc(topicOf(day))}</span>
+        ${day.alt ? `<span class="ralt" style="display:block">Alternate: ${esc(day.alt)}</span>` : ""}
+        ${s.trending ? `<span class="rtrend" style="display:block">Trending: ${esc(s.trending)}</span>` : ""}
+      </span>
+    </button>`;
+  }).join("");
+}
+
+function renderDetail() {
+  const day = DAYS[selected - 1];
+  const s = store[day.d] || {};
+  const occ = day.occ.length
+    ? day.occ.map(o => `<li class="t-${o[1]}"><span class="dot"></span>${esc(o[0])}</li>`).join("")
+    : `<li class="none">No major date. Evergreen day.</li>`;
+  detail.innerHTML = `
+    <h2>${weekday(day.d)}, ${day.d} October</h2>
+    <ul class="occ-list">${occ}</ul>
+    <div class="field">
+      <label for="fTopic">Evergreen reel</label>
+      <textarea id="fTopic" rows="2">${esc(topicOf(day))}</textarea>
+      ${day.alt ? `<p class="alt">Alternate: ${esc(day.alt)}</p>` : ""}
+      <label class="check"><input type="checkbox" id="fEv" ${s.ev ? "checked" : ""}>Posted</label>
+    </div>
+    <div class="field">
+      <label for="fTrend">Trending reel</label>
+      <p class="hint">Pick from that morning's news.</p>
+      <input type="text" id="fTrend" value="${esc(s.trending || "")}" placeholder="Today's news topic">
+      <label class="check"><input type="checkbox" id="fTr" ${s.tr ? "checked" : ""}>Posted</label>
+    </div>
+    <div class="field">
+      <label for="fNotes">Notes and sources</label>
+      <textarea id="fNotes" rows="3" placeholder="Script points, sources to pin, visuals">${esc(s.notes || "")}</textarea>
+    </div>
+    <button type="button" class="reset" id="fReset">Restore suggested topic</button>
+  `;
+  const upd = () => { renderGrid(); renderList(); };
+  document.getElementById("fTopic").addEventListener("input", e => { saved(day.d).topic = e.target.value; save(); upd(); });
+  document.getElementById("fTrend").addEventListener("input", e => { saved(day.d).trending = e.target.value; save(); renderList(); });
+  document.getElementById("fNotes").addEventListener("input", e => { saved(day.d).notes = e.target.value; save(); });
+  document.getElementById("fEv").addEventListener("change", e => { saved(day.d).ev = e.target.checked; save(); upd(); });
+  document.getElementById("fTr").addEventListener("change", e => { saved(day.d).tr = e.target.checked; save(); upd(); });
+  document.getElementById("fReset").addEventListener("click", () => {
+    if (store[day.d]) delete store[day.d].topic;
+    save(); upd(); renderDetail();
+  });
+}
+
+function select(d, scroll) {
+  selected = d;
+  renderGrid(); renderList(); renderDetail();
+  if (scroll && window.matchMedia("(max-width: 1040px)").matches) {
+    detail.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }
+}
+
+grid.addEventListener("click", e => { const b = e.target.closest("[data-d]"); if (b) select(+b.dataset.d, true); });
+listView.addEventListener("click", e => { const b = e.target.closest("[data-d]"); if (b) select(+b.dataset.d, true); });
+
+const vMonth = document.getElementById("vMonth");
+const vList = document.getElementById("vList");
+function setView(v) {
+  const isList = v === "list";
+  monthView.hidden = isList;
+  listView.hidden = !isList;
+  vMonth.setAttribute("aria-pressed", String(!isList));
+  vList.setAttribute("aria-pressed", String(isList));
+  try { localStorage.setItem(KEY + "-view", v); } catch (e) {}
+}
+vMonth.addEventListener("click", () => setView("month"));
+vList.addEventListener("click", () => setView("list"));
+
+let initialView = null;
+try { initialView = localStorage.getItem(KEY + "-view"); } catch (e) {}
+if (!initialView) initialView = window.matchMedia("(max-width: 700px)").matches ? "list" : "month";
+
+select(selected, false);
+setView(initialView);
+</script>
+</body>
+</html>
